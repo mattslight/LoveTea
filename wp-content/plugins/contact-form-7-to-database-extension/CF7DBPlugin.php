@@ -49,6 +49,7 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
             'Donated' => array(__('I have donated to this plugin', 'contact-form-7-to-database-extension'), 'false', 'true'),
             'IntegrateWithCF7' => array(__('Capture form submissions from Contact Form 7 Plugin', 'contact-form-7-to-database-extension'), 'true', 'false'),
             'IntegrateWithFSCF' => array(__('Capture form submissions from Fast Secure Contact Form Plugin', 'contact-form-7-to-database-extension'), 'true', 'false'),
+            'IntegrateWithJetPackContactForm' => array(__('Capture form submissions from JetPack Contact Form', 'contact-form-7-to-database-extension'), 'true', 'false'),
             'CanSeeSubmitData' => array(__('Can See Submission data', 'contact-form-7-to-database-extension'),
                                         'Administrator', 'Editor', 'Author', 'Contributor', 'Subscriber', 'Anyone'),
             'CanSeeSubmitDataViaShortcode' => array(__('Can See Submission when using shortcodes', 'contact-form-7-to-database-extension'),
@@ -219,6 +220,30 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
         }
     }
 
+    protected function initOptions() {
+        // By default ignore CF7 metadata fields
+        $this->addOption('NoSaveFields', '_wpcf7,_wpcf7_version,_wpcf7_unit_tag,_wpnonce,_wpcf7_is_ajax_call');
+    }
+
+    public function add_wpcf7_noSaveFields() {
+        $nsfArray = explode(',', $this->getOption('NoSaveFields',''));
+        $wpcf7Fields = array('_wpcf7', '_wpcf7_version', '_wpcf7_unit_tag', '_wpnonce', '_wpcf7_is_ajax_call');
+        foreach ($wpcf7Fields as $aWpcf7) {
+           if (!in_array($aWpcf7, $nsfArray)) {
+               $nsfArray[] = $aWpcf7;
+           }
+        }
+        $this->updateOption('NoSaveFields', implode(',', $nsfArray));
+    }
+
+    public function delete_wpcf7_fields($formName) {
+        global $wpdb;
+        $wpdb->query($wpdb->prepare(
+            'delete from `' . $this->getSubmitsTableName() .
+                    "` where `form_name` = '%s' and `field_name` in ('_wpcf7', '_wpcf7_version', '_wpcf7_unit_tag', '_wpnonce', '_wpcf7_is_ajax_call')",
+            $formName));
+    }
+
     public function addActionsAndFilters() {
         // Add the Admin Config page for this plugin
 
@@ -237,6 +262,11 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
         if ($this->getOption('IntegrateWithFSCF', 'true') == 'true') {
             add_action('fsctf_mail_sent', array(&$this, 'saveFormData'));
             add_action('fsctf_menu_links', array(&$this, 'fscfMenuLinks'));
+        }
+
+        // Hook into JetPack Contact Form
+        if ($this->getOption('IntegrateWithJetPackContactForm', 'true') == 'true') {
+            add_action('grunion_pre_message_sent', array(&$this, 'saveJetPackContactFormData'), 10, 3);
         }
 
         // Have our own hook to publish data independent of other plugins
@@ -432,17 +462,35 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
                 return; // Don't save in DB
             }
 
-            global $wpdb;
             $time = function_exists('microtime') ? microtime(true) : time();
-
             $ip = (isset($_SERVER['X_FORWARDED_FOR'])) ? $_SERVER['X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+
+            // Set up to allow all this data to be filtered
+            $cf7->submit_time = $time;
+            $cf7->ip = $ip;
+            $user = null;
+            if (is_user_logged_in()) {
+                $current_user = wp_get_current_user(); // WP_User
+                $user = $current_user->user_login;
+                $cf7->user = $user;
+            }
+            try {
+                $cf7 = apply_filters('cfdb_form_data', $cf7);
+                $time = $cf7->submit_time;
+                $ip = $cf7->ip;
+                $user = $cf7->user;
+            }
+            catch (Exception $ex) {
+                error_log(sprintf('CFDB Error: %s:%s %s  %s', $ex->getFile(), $ex->getLine(), $ex->getMessage(), $ex->getTraceAsString()));
+            }
+
             $tableName = $this->getSubmitsTableName();
             $parametrizedQuery = "INSERT INTO `$tableName` (`submit_time`, `form_name`, `field_name`, `field_value`, `field_order`) VALUES (%s, %s, %s, %s, %s)";
             $parametrizedFileQuery = "UPDATE `$tableName` SET `file` = '%s' WHERE `submit_time` = %F AND `form_name` = '%s' AND `field_name` = '%s' AND `field_value` = '%s'";
-
             $order = 0;
             $noSaveFields = $this->getNoSaveFields();
             $foundUploadFiles = array();
+            global $wpdb;
             foreach ($cf7->posted_data as $name => $value) {
                 $nameClean = stripslashes($name);
                 if (in_array($nameClean, $noSaveFields)) {
@@ -514,14 +562,14 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
             }
 
             // If the submitter is logged in, capture his id
-            if (is_user_logged_in()) {
+            if ($user) {
                 $order = ($order < 9999) ? 9999 : $order + 1; // large order num to try to make it always next-to-last
                 $current_user = wp_get_current_user(); // WP_User
                 $wpdb->query($wpdb->prepare($parametrizedQuery,
                                             $time,
                                             $title,
                                             'Submitted Login',
-                                            $current_user->user_login,
+                                            $user,
                                             $order));
             }
 
@@ -538,6 +586,20 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
         catch (Exception $ex) {
             error_log(sprintf('CFDB Error: %s:%s %s  %s', $ex->getFile(), $ex->getLine(), $ex->getMessage(), $ex->getTraceAsString()));
         }
+    }
+
+    /**
+     * @param $post_id int
+     * @param $all_values array
+     * @param $extra_values array
+     */
+    public function saveJetPackContactFormData($post_id, $all_values, $extra_values) {
+        $all_values['post_id'] = $post_id;
+        $data = (object)  array(
+            'title' => 'JetPack Contact Form',
+            'posted_data' => $all_values,
+            'uploaded_files' => null);
+        $this->saveFormData($data);
     }
 
     /**
@@ -577,10 +639,11 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
         if (strpos($_SERVER['REQUEST_URI'], $this->getDBPageSlug()) !== false) {
             $pluginUrl = $this->getPluginFileUrl() . '/';
             wp_enqueue_script('jquery');
-//            wp_enqueue_style('jquery-ui.css', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/themes/base/jquery-ui.css');
-            wp_enqueue_style('jquery-ui.css', $pluginUrl . 'jquery-ui/jquery-ui.css');
-            wp_enqueue_script('jquery-ui-dialog', false, array('jquery'));
+            wp_enqueue_script('jquery-ui-core');
+            wp_enqueue_script('jquery-ui-dialog');
             wp_enqueue_script('CF7DBdes', $pluginUrl . 'des.js');
+
+            wp_enqueue_style('jquery-ui.css', $pluginUrl . 'jquery-ui/jquery-ui-1.8.21.custom.css');
 
             // Datatables http://www.datatables.net
             if ($this->getOption('UseDataTablesJS', 'true') == 'true') {
@@ -753,7 +816,9 @@ class CF7DBPlugin extends CF7DBPluginLifeCycle {
         //        if ($overrideTable && "" != $overrideTable) {
         //            return $overrideTable;
         //        }
-        return strtolower($this->prefixTableName('SUBMITS'));
+        //return strtolower($this->prefixTableName('SUBMITS'));
+        global $wpdb;
+        return $wpdb->prefix . strtolower($this->prefix('SUBMITS'));
     }
 
     /**

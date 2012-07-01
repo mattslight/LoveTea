@@ -1,0 +1,54 @@
+/* -------------------------------------------------- */
+/*	General Classes */
+/* -------------------------------------------------- */
+.highlight { color: #bf1e2d; }
+
+/* -------------------------------------------------- */
+/*	All Divs  */
+/* -------------------------------------------------- */
+#main-nav a:after {
+	text-transform: none;
+}
+
+#logo { margin-top: 0px; }
+
+#content { font-size: 13px }
+
+
+/* -------------------------------------------------- */
+/*	Home Page Slider */
+/* -------------------------------------------------- */
+.ss-slider { margin: 20px auto 35px; }
+
+.ss-slider .slide-button .description { font-size: 12px; }
+
+.ss-slider .slide-content p { font-size: 14px }
+
+.ss-slider .slide-content .button { font-size: 13px; }
+
+
+/* -------------------------------------------------- */
+/*	Packages Page */
+/* -------------------------------------------------- */
+
+#gift-anchor { position: relative; overflow: display; height: 0; width: 100%; }
+#gift { position: absolute; right: 0;    top: -50px;    z-index: 99; }
+
+.page-id-492 label, .page-id-975 label {
+	width: 100px;
+	float: left;
+}
+.page-id-975 .wpcf7-form textarea {
+	height: 60px;
+	max-width: 100%;
+	width: 200px;
+}
+
+.wpcf7-form input.date { width: 35px; }
+
+
+/* -------------------------------------------------- */
+/*	Contact Page */
+/* -------------------------------------------------- */
+
+#map, #map .wpgmappity_container { height: 400px; }
