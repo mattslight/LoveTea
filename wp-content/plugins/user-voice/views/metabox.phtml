@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright 2008 Chris Abernethy
+ *
+ * This file is part of UserVoice.
+ * 
+ * UserVoice is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * UserVoice is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with UserVoice.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ */
+?>
+<p><label class="selectit"><input style="vertical-align:middle;" name="<?php echo attribute_escape($this->get('plugin_label') . '_active') ?>" type="checkbox" value="1" <?php echo $this->get('active') ? 'checked="checked"' : '' ?>/> <?php echo wp_specialchars(__('Enable UserVoice', 'user-voice')) ?></label></p>
+<p>
+    <?php echo wp_specialchars(__('What account name should be used with UserVoice? This is the user name that you use when logging in to UserVoice')) ?><br/>
+    <input type="text" size="32" maxlength="128" name="<?php echo attribute_escape($this->get('plugin_label') . '_username') ?>" value="<?php echo attribute_escape($this->get('username')) ?>"/>
+</p>
+<p>
+    <?php echo wp_specialchars(__('What page name should be used with UserVoice? This is generally an all-lowercase version of the name you used at UserVoice, with spaces replaced by underscores. For example, if your UserVoice page is named "My Page", you should enter "my_page" here.')) ?><br/>
+    <input type="text" size="32" maxlength="128" name="<?php echo attribute_escape($this->get('plugin_label') . '_slug') ?>" value="<?php echo attribute_escape($this->get('slug')) ?>"/>
+</p>
+<p>
+    <?php echo wp_specialchars(__('Which side of the browser window should the UserVoice tab be on?', 'user-voice')) ?><br/>
+    <select name="<?php echo attribute_escape($this->get('plugin_label') . '_alignment') ?>">
+        <option value="left" <?php echo 'left' == $this->get('alignment') ? 'selected="selected"' : '' ?>>Left</option>
+        <option value="right" <?php echo 'right' == $this->get('alignment') ? 'selected="selected"' : '' ?>>Right</option>
+    </select>
+</p>
+<p>
+    <?php echo wp_specialchars(__('What color should be used for the background of the UserVoice tab? Use the appropriate hex value without the hash mark, e.g., 00BCBA for your color.', 'user-voice')) ?><br/>
+    <input type="text" size="6" maxlength="6" name="<?php echo attribute_escape($this->get('plugin_label') . '_color') ?>" value="<?php echo attribute_escape($this->get('color')) ?>"/>
+</p>
