@@ -1,3 +1,4 @@
+<?php //include_once(SS_BASE_DIR . '../../custom/country_detect.php'); ?>
 <!DOCTYPE html>
 
 <!--[if IE 7]>                  <html class="ie7 no-js"  <?php language_attributes(); ?>     <![endif]-->

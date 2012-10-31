@@ -1,0 +1,57 @@
+form.recurly.subscribe
+  //if lt IE 7
+    div.iefail
+      div.chromeframe
+        p.blast Your browser is not supported by Recurly.js.
+        p
+          a(href="http://browsehappy.com/") Upgrade to a different browser
+        p or
+        p
+          a(href="http://www.google.com/chromeframe/?redirect=true") install Google Chrome Frame
+        p to use this site.
+  .subscription
+    .plan 
+      .name 
+      .field.quantity
+        .placeholder Qty
+        input(type="text")
+
+      .recurring_cost
+        .cost
+        .interval
+
+      .free_trial
+
+      .setup_fee
+        .title Setup Fee
+        .cost
+
+
+    .add_ons.none 
+
+    .coupon
+      .coupon_code.field
+        .placeholder Coupon Code
+        input.coupon_code(type="text")
+      .check
+      .description
+      .discount
+
+    .vat
+      .title VAT
+      .cost
+
+  .due_now
+    .title Order Total
+    .cost 
+
+  .server_errors.none
+
+  .contact_info
+
+  .billing_info
+
+  .accept_tos
+ 
+  .footer
+    button.submit(type='submit') Subscribe

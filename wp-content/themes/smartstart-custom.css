@@ -3,15 +3,25 @@
 /* -------------------------------------------------- */
 .highlight { color: #bf1e2d; }
 
+.dropcap {
+	background: #eaeaea;
+	color: #777;
+	display: inline-block;
+	float: left;
+	font-size: 29px;
+	font-weight: 600;
+	height: 40px;
+	line-height: 38px;
+	margin: 0 7px 0 0;
+	text-align: center;
+	width: 35px;
+}
+
 /* -------------------------------------------------- */
 /*	All Divs  */
 /* -------------------------------------------------- */
-#main-nav a:after {
-	text-transform: none;
-}
-
+#main-nav a:after { text-transform: none; }
 #logo { margin-top: 0px; }
-
 #content { font-size: 13px }
 
 
@@ -19,11 +29,8 @@
 /*	Home Page Slider */
 /* -------------------------------------------------- */
 .ss-slider { margin: 20px auto 35px; }
-
 .ss-slider .slide-button .description { font-size: 12px; }
-
 .ss-slider .slide-content p { font-size: 14px }
-
 .ss-slider .slide-content .button { font-size: 13px; }
 
 

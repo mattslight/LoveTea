@@ -25,7 +25,9 @@ class WPCF7_ContactForm {
 		register_post_type( self::post_type, array(
 			'labels' => array(
 				'name' => __( 'Contact Forms', 'wpcf7' ),
-				'singular_name' => __( 'Contact Form', 'wpcf7' ) ) ) );
+				'singular_name' => __( 'Contact Form', 'wpcf7' ) ),
+			'rewrite' => false,
+			'query_var' => false ) );
 	}
 
 	public static function find( $args = '' ) {
@@ -400,12 +402,14 @@ class WPCF7_ContactForm {
 	}
 
 	function spam() {
-		$spam = false;
+		/*$spam = false;
 
 		if ( WPCF7_VERIFY_NONCE && ! $this->verify_nonce() )
 			$spam = true;
 
-		return apply_filters( 'wpcf7_spam', $spam );
+		return apply_filters( 'wpcf7_spam', $spam );*/
+
+		return false;
 	}
 
 	function verify_nonce() {
