@@ -649,7 +649,7 @@ input.placeholder, textarea.placeholder, .wpcf7 .watermark { color: #b0b0b0; }
 	.ie7 .page-header { margin-top: 0; }
 
 		.slogan, .page-title, .page-description, .page-subdescription, .project-title {
-			font-weight: 300;
+			font-weight: 400;
 			letter-spacing: -0.1px;
 			margin-bottom: 0;
 		}

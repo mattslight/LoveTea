@@ -1,0 +1,127 @@
+.dropcap {
+	background: #eaeaea;
+	color: #777;
+	display: inline-block;
+	float: left;
+	font-size: 29px;
+	font-weight: 600;
+	height: 40px;
+	line-height: 38px;
+	margin: 0 7px 0 0;
+	text-align: center;
+	width: 35px;
+}
+
+h1 .button {
+    font-size: 16px !important;
+	position: relative;
+	top: 10px;
+	font-weight: bold;
+}
+
+/* -------------------------------------------------- */
+/*	General Classes */
+/* -------------------------------------------------- */
+.highlight { color: #bf1e2d; }
+.red { color: #bf1e2d; }
+.black { color: #111; }
+
+.tea-detail { width: 100%; float: left; position: relative; left: 55px } 
+.tea-detail p { font-size: 16px; padding-left: 5px; }
+#tea-temp img { position: relative; top: 15px; padding: 0px 17px 0px 9px }
+#tea-steep img { position: relative; top: 10px; padding: 0px 6px 0px 0px }
+#tea-leaf img { position: relative; top: 13px; padding: 0px 16px 0px 7px   }
+
+.button-large { font-size: 16px !important; font-weight: 600 !important }
+.section-rule { border-bottom: 1px solid #EFEFEF; }
+
+.faq-catname { color: #BF1E2D; }
+/* -------------------------------------------------- */
+/*	All Divs  */
+/* -------------------------------------------------- */
+#main-nav a:after {
+	text-transform: none;
+}
+
+#logo { margin-top: 0px; }
+#content { font-size: 13px }
+.home #content { padding-top: 0px !important; }
+
+
+/* -------------------------------------------------- */
+/*	Home Page */
+/* -------------------------------------------------- */
+.ss-slider { margin: 20px auto 35px; }
+.ss-slider .slide-button .description { font-size: 12px; }
+.ss-slider .slide-content p { font-size: 14px }
+.ss-slider .slide-content .button { font-size: 13px; }
+.hero { margin-bottom: 40px; }
+
+
+/* -------------------------------------------------- */
+/*	Packages Page */
+/* -------------------------------------------------- */
+
+#gift-anchor { position: relative; overflow: display; height: 0; width: 100%; }
+#gift { position: absolute; right: 0;    top: -50px;    z-index: 99; }
+
+.page-id-492 label, .page-id-975 label, .page-id-1308 label {
+	width: 100px;
+	float: left;
+}
+.page-id-975 .wpcf7-form textarea, .page-id-1308 .wpcf7-form textarea {
+	height: 60px;
+	max-width: 100%;
+	width: 200px;
+}
+
+.wpcf7-form input.date { width: 35px; }
+
+.wpcf7-text { padding: 0px }
+
+
+/* -------------------------------------------------- */
+/*	Contact Page */
+/* -------------------------------------------------- */
+
+#map, #map .wpgmappity_container { height: 400px; }
+
+* -------------------------------------------------- */
+/*	FAQ Page */
+/* -------------------------------------------------- */
+
+#qaplus_searchsubmit {
+  position: relative;
+  top: -9px;
+  height: 36px;
+}
+
+/* -------------------------------------------------- */
+/*	Sample Popup Form */
+/* -------------------------------------------------- */
+
+#sample_form_pop .wpcf7-text {
+	padding: 0px;
+	border: none;
+	background: none;
+	border-bottom: 1px dashed #CCC;
+	width: 195px !important;
+	position: relative;
+	top: -5px;
+	font-size: 12px;
+}
+
+#sample_form_pop label {
+	width: 90px;
+	float: left;
+	font-size: 13px;
+}
+
+#sample_form_pop p {
+	margin-bottom: 5px;
+	font-size: 13px;
+}
+
+#sample_form_pop h2 {
+	width: 300px;
+}
