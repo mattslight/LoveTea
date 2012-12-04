@@ -47,6 +47,15 @@ h1 .button {
 #content { font-size: 13px }
 .home #content { padding-top: 0px !important; }
 
+#header-social {
+	background: #303030;
+	line-height: 45px;
+	height: 40px;
+	text-align: right;
+	width: 100%;
+	border-bottom: 4px solid #868686;
+}
+
 
 /* -------------------------------------------------- */
 /*	Home Page */

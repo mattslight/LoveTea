@@ -1,10 +1,3 @@
-<?php //include_once(SS_BASE_DIR . '../../custom/country_detect.php'); ?>
-<?php if ((strpos($_SERVER['REQUEST_URI'],'/deals') !== FALSE) && !( !empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' )) {
-   header("HTTP/1.1 301 Moved Permanently");
-   header("Location: https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-   exit();
-}
-?>
 <!DOCTYPE html>
 
 <!--[if IE 7]>                  <html class="ie7 no-js"  <?php language_attributes(); ?>     <![endif]-->
@@ -34,9 +27,23 @@
 	<link rel='stylesheet' href='/wp-content/custom/css/lovetea.css' type='text/css' media='all' />
 
 	<?php wp_head(); ?>
+
 </head>
 
 <body <?php body_class(); ?>>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=130852203736308";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<header id="header-social" class="container clearfix">
+	<div class="fb-like" data-href="http://www.lovetea.co/" data-send="true" data-width="480" data-show-faces="false" data-font="lucida grande" data-colorscheme="dark"></div>
+</header>
 
 <header id="header" class="container clearfix">
 
